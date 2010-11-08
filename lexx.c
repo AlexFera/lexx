@@ -75,8 +75,10 @@ void lexical_analysis(FILE *input_file, char current_charcter, FILE *output_file
 				if(current_charcter == operators[i]) 
 					fprintf(output_file, "%c \t\t\teste un operator\n", current_charcter);
 	for(i = 0; i < 10; i++)
-		if(current_charcter == separators[i])
+		if(current_charcter == separators[i]) {
 			fprintf(output_file, "%c \t\t\teste un semn de punctuatie\n", current_charcter);
+			break;
+		}
 	if(current_charcter == '"') {
 		do {
 			current_charcter = fgetc(input_file);
