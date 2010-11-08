@@ -1,2 +1,2 @@
 all:
-	gcc -Wall -ansi lexx.c -o lexx
+	gcc -Wall -ansi -pedantic lexx.c -o lexx
