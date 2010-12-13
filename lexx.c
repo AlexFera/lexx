@@ -21,16 +21,17 @@
 #include <string.h>
 
 /* Manual lexical analysis */
-void lexical_analysis(FILE *input_file, char current_character, FILE *output_file)
+void lexical_analysis(FILE *input_file, char current_character, 
+		FILE *output_file)
 {
 	char 		token_characters[256];		
 	unsigned int  	length = 0;		
 	unsigned int  	i = 0;			
 	short 		is_keyword = 0;			
 	int 		number = 0;				
-	const char 	keywords[][13] = {"break", "char", "const", "do", "double", 
-					  "else", "float", "for", "if", "int", "return" , 
-					  "void", "while"}; 
+	const char 	keywords[][13] = {"break", "char", "const", "do", 
+		                          "double", "else", "float", "for",                                           "if", "int", "return" "void", 
+					  "while"}; 
 	const char 	operators[] = {"!%&*-+=~|.<>/?"};
 	const char 	separators[] = {";,{}()[]}"};
 	
