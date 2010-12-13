@@ -20,36 +20,31 @@
 #include <ctype.h>
 #include <string.h>
 
-/* Analiză lexicală manuală */
+/* Manual lexical analysis */
 void lexical_analysis(FILE *input_file, char current_character, FILE *output_file)
 {
-	char token_characters[256];		/* tablou de carctere unde sunt depuse dupa *
-       						* caz caracterele componente ale atomului curent*/
-	unsigned int  length = 0;		/* variabilă contor */
-	unsigned int  i = 0;			/* variabilă contor */
+	char token_characters[256];		
+	unsigned int  length = 0;		
+	unsigned int  i = 0;			
 	short is_keyword = 0;			
-	int number = 0;				/* constanta întreagă */
+	int number = 0;				
 	const char keywords[][13] = {"break", "char", "const", "do", "double", 
 		"else", "float", "for", "if", "int", "return" , "void", "while"}; 
 	const char operators[] = {"!%&*-+=~|.<>/?"};
 	const char separators[] = {";,{}()[]}"};
 	
-	/* Parcurgere cod sursă până la întâlnirea
-	 * unui carcter diferit de spatiu alb */
+	
 	is_keyword = 0;
 	while(current_character == ' ' || current_character == '\n')
 		current_character = fgetc(input_file);
 
-	/* Clasificare carcter si prelucrare atom */
 	if(isalpha(current_character)) {
-		/* Prelucrează identificator sau cuvânt cheie */
-		
 		while(isalpha(current_character) || isdigit(current_character)) {
 			token_characters[length++] = current_character;
 			current_character = fgetc(input_file);
 		}
 		token_characters[length++] = '\0';
-		/* testăm dacă este cuvânt cheie */
+		/* testing for keyword */
 		for(i = 0; i < 13; i++) {
 			if(strcmp(keywords[i], token_characters) == 0) {
 				fprintf(output_file, "%s \t\t\teste cuvant cheie\n", token_characters);
@@ -62,7 +57,7 @@ void lexical_analysis(FILE *input_file, char current_character, FILE *output_fil
 	}
 	else
 		if(isdigit(current_character)) {
-			/* Prelucrează constantă numerică */
+			/* Numeric constant */
 			while(isdigit(current_character)) {
 				number = number * 10 + atoi(&current_character);
 				current_character = fgetc(input_file);
@@ -70,7 +65,7 @@ void lexical_analysis(FILE *input_file, char current_character, FILE *output_fil
 			fprintf(output_file, "%d \t\t\teste un numar\n", number);
 		}
 		else
-			/* Altfel este operator */
+			/* Testing for operators */
 			for(i = 0; i < 14; i++)
 				if(current_character == operators[i]) 
 					fprintf(output_file, "%c \t\t\teste un operator\n", current_character);
