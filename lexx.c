@@ -51,15 +51,15 @@ void lexical_analysis(FILE *input_file, char current_character,
 		/* testing for keyword */
 		for(i = 0; i < 13; i++) {
 			if(strcmp(keywords[i], token_characters) == 0) {
-				fprintf(output_file, "%s \t\t\teste cuvant 
-						cheie\n", token_characters);
+				fprintf(output_file, "%s \t\t\teste cuvant" 
+						"cheie\n", token_characters);
 				is_keyword = 1;
 				break;
 			}
 		}
 		if(is_keyword == 0) 
-			fprintf(output_file, "%s \t\t\teste idenfificator
-					\n", token_characters);
+			fprintf(output_file, "%s \t\t\teste idenfificator"
+					"\n", token_characters);
 	}
 	else
 		if(isdigit(current_character)) {
@@ -76,13 +76,13 @@ void lexical_analysis(FILE *input_file, char current_character,
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
 				if(current_character == operators[i]) 
-					fprintf(output_file, "%c \t\t\teste 
-						un operator\n", 
+					fprintf(output_file, "%c \t\t\teste" 
+						"un operator\n", 
 						current_character);
 	for(i = 0; i < 10; i++)
 		if(current_character == separators[i]) {
-			fprintf(output_file, "%c \t\t\teste un semn de 
-					punctuatie\n", current_character);
+			fprintf(output_file, "%c \t\t\teste un semn de" 
+					"punctuatie\n", current_character);
 			break;
 		}
 	if(current_character == '"') {
