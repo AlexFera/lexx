@@ -30,7 +30,8 @@ void lexical_analysis(FILE *input_file, char current_character,
 	short 		is_keyword = 0;			
 	int 		number = 0;				
 	const char 	keywords[][13] = {"break", "char", "const", "do", 
-		                          "double", "else", "float", "for",                                           "if", "int", "return" "void", 
+		                          "double", "else", "float", "for",
+					  "if", "int", "return" "void", 
 					  "while"}; 
 	const char 	operators[] = {"!%&*-+=~|.<>/?"};
 	const char 	separators[] = {";,{}()[]}"};
@@ -41,7 +42,8 @@ void lexical_analysis(FILE *input_file, char current_character,
 		current_character = fgetc(input_file);
 
 	if(isalpha(current_character)) {
-		while(isalpha(current_character) || isdigit(current_character)) {
+		while(isalpha(current_character) || 
+				isdigit(current_character)) {
 			token_characters[length++] = current_character;
 			current_character = fgetc(input_file);
 		}
@@ -49,31 +51,38 @@ void lexical_analysis(FILE *input_file, char current_character,
 		/* testing for keyword */
 		for(i = 0; i < 13; i++) {
 			if(strcmp(keywords[i], token_characters) == 0) {
-				fprintf(output_file, "%s \t\t\teste cuvant cheie\n", token_characters);
+				fprintf(output_file, "%s \t\t\teste cuvant 
+						cheie\n", token_characters);
 				is_keyword = 1;
 				break;
 			}
 		}
 		if(is_keyword == 0) 
-			fprintf(output_file, "%s \t\t\teste idenfificator\n", token_characters);
+			fprintf(output_file, "%s \t\t\teste idenfificator
+					\n", token_characters);
 	}
 	else
 		if(isdigit(current_character)) {
 			/* Numeric constant */
 			while(isdigit(current_character)) {
-				number = number * 10 + atoi(&current_character);
+				number = number * 10 + 
+					atoi(&current_character);
 				current_character = fgetc(input_file);
 			}
-			fprintf(output_file, "%d \t\t\teste un numar\n", number);
+			fprintf(output_file, "%d \t\t\teste un numar\n", 
+					number);
 		}
 		else
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
 				if(current_character == operators[i]) 
-					fprintf(output_file, "%c \t\t\teste un operator\n", current_character);
+					fprintf(output_file, "%c \t\t\teste 
+						un operator\n", 
+						current_character);
 	for(i = 0; i < 10; i++)
 		if(current_character == separators[i]) {
-			fprintf(output_file, "%c \t\t\teste un semn de punctuatie\n", current_character);
+			fprintf(output_file, "%c \t\t\teste un semn de 
+					punctuatie\n", current_character);
 			break;
 		}
 	if(current_character == '"') {
@@ -111,7 +120,8 @@ int main(int argc, char **argv)
 	}
 	
 	while((current_character = fgetc(input_file)) != EOF)
-		lexical_analysis(input_file, current_character, output_file);
+		lexical_analysis(input_file, current_character, 
+				output_file);
 	
 	fclose(input_file);
 	fclose(output_file);
