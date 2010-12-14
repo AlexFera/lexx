@@ -19,9 +19,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include "lexx.h"
 
 /* Manual lexical analysis */
-void lexical_analysis(FILE *input_file, char current_character, 
+token lexical_analysis(FILE *input_file, char current_character, 
 		FILE *output_file)
 {
 	char 		token_characters[256];		
@@ -35,8 +36,11 @@ void lexical_analysis(FILE *input_file, char current_character,
 					  "while"}; 
 	const char 	operators[] = {"!%&*-+=~|.<>/?"};
 	const char 	separators[] = {";,{}()[]}"};
+	token		t;
+	char		buffer[2];
 	
-	
+	/* Consume white space and new lines */
+	/* TODO: use isspace() */
 	is_keyword = 0;
 	while(current_character == ' ' || current_character == '\n')
 		current_character = fgetc(input_file);
@@ -51,15 +55,16 @@ void lexical_analysis(FILE *input_file, char current_character,
 		/* testing for keyword */
 		for(i = 0; i < 13; i++) {
 			if(strcmp(keywords[i], token_characters) == 0) {
-				fprintf(output_file, "%s \t\t\teste cuvant" 
-						"cheie\n", token_characters);
+				t.code = KEYWORD;
+				t.name = token_characters;
 				is_keyword = 1;
 				break;
 			}
 		}
-		if(is_keyword == 0) 
-			fprintf(output_file, "%s \t\t\teste idenfificator"
-					"\n", token_characters);
+		if(is_keyword == 0) {
+			t.code = IDENTIFIER;
+			t.name = token_characters;
+		}
 	}
 	else
 		if(isdigit(current_character)) {
@@ -69,29 +74,31 @@ void lexical_analysis(FILE *input_file, char current_character,
 					atoi(&current_character);
 				current_character = fgetc(input_file);
 			}
-			fprintf(output_file, "%d \t\t\teste un numar\n", 
-					number);
+			t.code = NUMBER;
+			t.value = number;
 		}
 		else
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
-				if(current_character == operators[i]) 
-					fprintf(output_file, "%c \t\t\teste" 
-						"un operator\n", 
-						current_character);
+				if(current_character == operators[i]) { 
+					t.code = OPERATOR;
+					buffer[0] = operators[i];
+					t.name = buffer;
+				}
 	for(i = 0; i < 10; i++)
 		if(current_character == separators[i]) {
-			fprintf(output_file, "%c \t\t\teste un semn de" 
-					"punctuatie\n", current_character);
+			t.code = PUNCTUATION;
+			buffer[0] = separators[i];
+			t.name = buffer;
 			break;
 		}
 	if(current_character == '"') {
 		do {
-			current_character = fgetc(input_file);
-			fprintf(output_file, "%c", current_character);
+			/* TODO code */
 		}while(current_character != '"');
-		fprintf(output_file, "\t\teste un sir de caractere\n");
+		t.code = STRING;
 	}
+	return t;
 }
 
 int main(int argc, char **argv)
@@ -100,6 +107,7 @@ int main(int argc, char **argv)
 	FILE 		*input_file;
 	FILE 		*output_file;
 	char 		current_character;
+	token		t;
 
 	if(argc == 1) {
 		printf("Introduceti numele fisierului ca parametru in " 
@@ -119,9 +127,45 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	
-	while((current_character = fgetc(input_file)) != EOF)
-		lexical_analysis(input_file, current_character, 
+	while((current_character = fgetc(input_file)) != EOF) {
+		t = lexical_analysis(input_file, current_character, 
 				output_file);
+		switch(t.code) {
+			case IDENTIFIER:
+				printf("Identificator\t\t");
+				printf("%s\n", t.name);
+				break;
+			case KEYWORD:
+				printf("Cuvant cheie\t\t");
+				printf("%s\n", t.name);
+				break;
+			case NUMBER:
+				printf("Constanta numerica\t\t");
+				printf("%d\n", t.value);
+				break;
+			case OPERATOR:
+				printf("Operator\t\t");
+				printf("%d\n", t.name[0]);
+				break;
+			case PUNCTUATION:
+				printf("Semn de punctuatie\t\t");
+				printf("%c\n", t.name[0]);
+				break;
+			case DELIMITER:
+				printf("Delimitator\t\t");
+				printf("%d\n", t.name[0]);
+				break;
+			case STRING:
+				printf("Contanta sir de caractere\t");
+				printf("%d\n", t.value);
+				break;
+			default:
+				printf("\n");
+				break;
+
+		}
+
+	}
 	
 	fclose(input_file);
 	fclose(output_file);
