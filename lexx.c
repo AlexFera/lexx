@@ -98,7 +98,7 @@ token lexical_analysis(FILE *input_file, char current_character,
 		t.code = STRING;
 		return t;
 	}
-	return t;
+	exit(-1);
 }
 
 int main(int argc, char **argv)
