@@ -37,12 +37,10 @@ token lexical_analysis(FILE *input_file, char current_character,
 	const char 	operators[] = {"!%&*-+=~|.<>/?"};
 	const char 	separators[] = {";,{}()[]}"};
 	token		t;
-	char		buffer[2];
 	
 	/* Consume white space and new lines */
-	/* TODO: use isspace() */
 	is_keyword = 0;
-	while(current_character == ' ' || current_character == '\n')
+	while(isspace(current_character) || current_character == '\n')
 		current_character = fgetc(input_file);
 
 	if(isalpha(current_character)) {
@@ -58,12 +56,13 @@ token lexical_analysis(FILE *input_file, char current_character,
 				t.code = KEYWORD;
 				t.name = token_characters;
 				is_keyword = 1;
-				break;
+				return t;
 			}
 		}
 		if(is_keyword == 0) {
 			t.code = IDENTIFIER;
 			t.name = token_characters;
+			return t;
 		}
 	}
 	else
@@ -76,27 +75,28 @@ token lexical_analysis(FILE *input_file, char current_character,
 			}
 			t.code = NUMBER;
 			t.value = number;
+			return t;
 		}
 		else
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
 				if(current_character == operators[i]) { 
 					t.code = OPERATOR;
-					buffer[0] = operators[i];
-					t.name = buffer;
+					t.name[0] = current_character; 
+					return t;
 				}
 	for(i = 0; i < 10; i++)
 		if(current_character == separators[i]) {
 			t.code = PUNCTUATION;
-			buffer[0] = separators[i];
-			t.name = buffer;
-			break;
+			t.name[0] = current_character;
+			return t;
 		}
 	if(current_character == '"') {
 		do {
 			/* TODO code */
 		}while(current_character != '"');
 		t.code = STRING;
+		return t;
 	}
 	return t;
 }
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 				break;
 			case OPERATOR:
 				printf("Operator\t\t");
-				printf("%d\n", t.name[0]);
+				printf("%c\n", t.name[0]);
 				break;
 			case PUNCTUATION:
 				printf("Semn de punctuatie\t\t");
