@@ -27,7 +27,8 @@ token lexical_analysis(FILE *input_file, char current_character,
 {
 	char 		token_characters[256];		
 	unsigned int  	length = 0;		
-	unsigned int  	i = 0;			
+	unsigned int  	i = 0;
+	unsigned int	j = 0;	
 	short 		is_keyword = 0;			
 	int 		number = 0;				
 	const char 	keywords[][13] = {"break", "char", "const", "do", 
@@ -37,7 +38,7 @@ token lexical_analysis(FILE *input_file, char current_character,
 	const char 	operators[] = {"!%&*-+=~|.<>/?"};
 	const char 	separators[] = {";,{}()[]}"};
 	token		t;
-	
+	char		buffer[256];
 	/* Consume white space and new lines */
 	is_keyword = 0;
 	while(isspace(current_character) || current_character == '\n')
@@ -93,9 +94,11 @@ token lexical_analysis(FILE *input_file, char current_character,
 		}
 	if(current_character == '"') {
 		do {
-			/* TODO code */
+			current_character = fgetc(input_file);
+			buffer[j++] = current_character;
 		}while(current_character != '"');
 		t.code = STRING;
+		t.name = buffer;
 		return t;
 	}
 	exit(-1);
@@ -157,7 +160,7 @@ int main(int argc, char **argv)
 				break;
 			case STRING:
 				printf("Contanta sir de caractere\t");
-				printf("%d\n", t.value);
+				printf("%s\n", t.name);
 				break;
 			default:
 				printf("\n");
