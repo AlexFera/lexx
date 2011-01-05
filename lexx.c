@@ -181,5 +181,5 @@ int main(int argc, char **argv)
 	fclose(input_file);
 	fclose(output_file);
 	
-	return 0;
+	return(0);
 }
