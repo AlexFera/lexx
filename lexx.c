@@ -39,6 +39,7 @@ token lexical_analysis(FILE *input_file, char current_character,
 	const char 	separators[] = {";,{}()[]}"};
 	token		t;
 	char		buffer[256];
+	
 	/* Consume white space and new lines */
 	is_keyword = 0;
 	while(isspace(current_character) || current_character == '\n')
@@ -51,6 +52,7 @@ token lexical_analysis(FILE *input_file, char current_character,
 			current_character = fgetc(input_file);
 		}
 		token_characters[length++] = '\0';
+		
 		/* testing for keyword */
 		for(i = 0; i < 13; i++) {
 			if(strcmp(keywords[i], token_characters) == 0) {
@@ -67,6 +69,7 @@ token lexical_analysis(FILE *input_file, char current_character,
 		}
 	}
 	else
+		
 		if(isdigit(current_character)) {
 			/* Numeric constant */
 			while(isdigit(current_character)) {
@@ -79,6 +82,7 @@ token lexical_analysis(FILE *input_file, char current_character,
 			return t;
 		}
 		else
+			
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
 				if(current_character == operators[i]) { 
@@ -86,12 +90,14 @@ token lexical_analysis(FILE *input_file, char current_character,
 					t.name[0] = current_character; 
 					return t;
 				}
+	
 	for(i = 0; i < 10; i++)
 		if(current_character == separators[i]) {
 			t.code = PUNCTUATION;
 			t.name[0] = current_character;
 			return t;
 		}
+	
 	if(current_character == '"') {
 		do {
 			current_character = fgetc(input_file);
@@ -101,6 +107,7 @@ token lexical_analysis(FILE *input_file, char current_character,
 		t.name = buffer;
 		return t;
 	}
+
 	exit(-1);
 }
 
@@ -117,6 +124,7 @@ int main(int argc, char **argv)
 		       "linia de comanda\n");
 		exit(EXIT_FAILURE);
 	}
+
 	filename = argv[1];
 	input_file = fopen(filename, "r");
 	if(input_file == NULL) {
