@@ -29,7 +29,7 @@ void lexical_analysis(FILE *input_file, char current_character)
 	unsigned int	j = 0;	
 	short 		is_keyword = 0;			
 	int 		number = 0;
-	/* keywords[][6] - 6 reprezinta lungimea cuvantului */	
+	/* keywords[][7] - 7 reprezinta lungimea cuvantului */	
 	const char 	keywords[][7] = {"break", "char", "const", "do", 
 		                          "double", "else", "float", "for",
 					  "if", "int", "return", "void", 
