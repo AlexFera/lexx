@@ -19,10 +19,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "lexx.h"
 
 /* Manual lexical analysis */
-token lexical_analysis(FILE *input_file, char current_character, 
+void lexical_analysis(FILE *input_file, char current_character, 
 		FILE *output_file)
 {
 	char 		token_characters[256];		
@@ -30,14 +29,14 @@ token lexical_analysis(FILE *input_file, char current_character,
 	unsigned int  	i = 0;
 	unsigned int	j = 0;	
 	short 		is_keyword = 0;			
-	int 		number = 0;				
-	const char 	keywords[][13] = {"break", "char", "const", "do", 
+	int 		number = 0;
+	/* keywords[][6] - 6 reprezinta lungimea cuvantului */	
+	const char 	keywords[][6] = {"break", "char", "const", "do", 
 		                          "double", "else", "float", "for",
-					  "if", "int", "return" "void", 
+					  "if", "int", "return", "void", 
 					  "while"}; 
 	const char 	operators[] = {"!%&*-+=~|.<>/?"};
 	const char 	separators[] = {";,{}()[]}"};
-	token		t;
 	char		buffer[256];
 	
 	/* Consume white space and new lines */
@@ -56,16 +55,14 @@ token lexical_analysis(FILE *input_file, char current_character,
 		/* testing for keyword */
 		for(i = 0; i < 13; i++) {
 			if(strcmp(keywords[i], token_characters) == 0) {
-				t.code = KEYWORD;
-				t.name = token_characters;
+				printf("%s\t este cuvant cheie\n", token_characters);
 				is_keyword = 1;
-				return t;
+				return;
 			}
 		}
 		if(is_keyword == 0) {
-			t.code = IDENTIFIER;
-			t.name = token_characters;
-			return t;
+			printf("%s\t este identificator\n", token_characters);
+			return;
 		}
 	}
 	else
@@ -77,25 +74,22 @@ token lexical_analysis(FILE *input_file, char current_character,
 					atoi(&current_character);
 				current_character = fgetc(input_file);
 			}
-			t.code = NUMBER;
-			t.value = number;
-			return t;
+			printf("%d\t este o constanta intreaga\n", number);
+			return;
 		}
 		else
 			
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
-				if(current_character == operators[i]) { 
-					t.code = OPERATOR;
-					t.name[0] = current_character; 
-					return t;
+				if(current_character == operators[i]) {
+				       printf("%c\t este operator\n", current_character);
+				       return;
 				}
 	
 	for(i = 0; i < 10; i++)
 		if(current_character == separators[i]) {
-			t.code = PUNCTUATION;
-			t.name[0] = current_character;
-			return t;
+			printf("%c\t este semn de punctuatie\n", current_character);
+			return;
 		}
 	
 	if(current_character == '"') {
@@ -103,12 +97,8 @@ token lexical_analysis(FILE *input_file, char current_character,
 			current_character = fgetc(input_file);
 			buffer[j++] = current_character;
 		}while(current_character != '"');
-		t.code = STRING;
-		t.name = buffer;
-		return t;
+		printf("%s este constanta sir de caractere\n", buffer);
 	}
-
-	exit(-1);
 }
 
 int main(int argc, char **argv)
@@ -117,7 +107,6 @@ int main(int argc, char **argv)
 	FILE 		*input_file;
 	FILE 		*output_file;
 	char 		current_character;
-	token		t;
 
 	if(argc == 1) {
 		printf("Introduceti numele fisierului ca parametru in " 
@@ -138,45 +127,10 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	
-	while((current_character = fgetc(input_file)) != EOF) {
-		t = lexical_analysis(input_file, current_character, 
+	while((current_character = fgetc(input_file)) != EOF)
+		lexical_analysis(input_file, current_character, 
 				output_file);
-		switch(t.code) {
-			case IDENTIFIER:
-				printf("Identificator\t\t");
-				printf("%s\n", t.name);
-				break;
-			case KEYWORD:
-				printf("Cuvant cheie\t\t");
-				printf("%s\n", t.name);
-				break;
-			case NUMBER:
-				printf("Constanta numerica\t\t");
-				printf("%d\n", t.value);
-				break;
-			case OPERATOR:
-				printf("Operator\t\t");
-				printf("%c\n", t.name[0]);
-				break;
-			case PUNCTUATION:
-				printf("Semn de punctuatie\t\t");
-				printf("%c\n", t.name[0]);
-				break;
-			case DELIMITER:
-				printf("Delimitator\t\t");
-				printf("%d\n", t.name[0]);
-				break;
-			case STRING:
-				printf("Contanta sir de caractere\t");
-				printf("%s\n", t.name);
-				break;
-			default:
-				printf("\n");
-				break;
 
-		}
-
-	}
 	
 	fclose(input_file);
 	fclose(output_file);
