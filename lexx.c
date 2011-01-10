@@ -57,12 +57,14 @@ void lexical_analysis(FILE *input_file, char current_character)
 				printf("%s\t este cuvant cheie\n",
 					       	token_characters);
 				is_keyword = 1;
+				ungetc(current_character, input_file);
 				return;
 			}
 		}
 		if(is_keyword == 0) {
 			printf("%s\t este identificator\n", 
 					token_characters);
+			ungetc(current_character, input_file);
 			return;
 		}
 	}
@@ -76,6 +78,7 @@ void lexical_analysis(FILE *input_file, char current_character)
 				current_character = fgetc(input_file);
 			}
 			printf("%d\t este o constanta intreaga\n", number);
+			ungetc(current_character, input_file);
 			return;
 		}
 		else
@@ -83,9 +86,9 @@ void lexical_analysis(FILE *input_file, char current_character)
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
 				if(current_character == operators[i]) {
-				       printf("%c\t este operator\n", 
+					printf("%c\t este operator\n", 
 						       current_character);
-				       return;
+				       	return;
 				}
 	
 	for(i = 0; i < 10; i++)
@@ -102,6 +105,7 @@ void lexical_analysis(FILE *input_file, char current_character)
 		}while(current_character != '"');
 		printf("%s este constanta sir de caractere\n", buffer);
 	}
+
 }
 
 int main(int argc, char **argv)
