@@ -105,7 +105,6 @@ int main(int argc, char **argv)
 {
 	const char 	*filename;
 	FILE 		*input_file;
-	FILE 		*output_file;
 	char 		current_character;
 
 	if(argc == 1) {
