@@ -103,6 +103,7 @@ void lexical_analysis(FILE *input_file, char current_character)
 			current_character = fgetc(input_file);
 			buffer[j++] = current_character;
 		}while(current_character != '"');
+		buffer[j] = '\0';
 		printf("%s este constanta sir de caractere\n", buffer);
 	}
 
