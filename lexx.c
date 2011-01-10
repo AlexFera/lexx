@@ -20,23 +20,25 @@
 #include <ctype.h>
 #include <string.h>
 
+#define MAXBUF	256
+#define	LEN	7	/* Lungimea maxima a unui cuvant cheie */
+
 /* Manual lexical analysis */
 void lexical_analysis(FILE *input_file, char current_character)
 {
-	char 		token_characters[256];		
+	char 		token_characters[MAXBUF];		
 	unsigned int  	length = 0;		
 	unsigned int  	i = 0;
 	unsigned int	j = 1;	
 	short 		is_keyword = 0;			
 	int 		number = 0;
-	/* keywords[][7] - 7 reprezinta lungimea cuvantului */	
-	const char 	keywords[][7] = {"break", "char", "const", "do", 
+	const char 	keywords[][LEN] = {"break", "char", "const", "do", 
 		                          "double", "else", "float", "for",
 					  "if", "int", "return", "void", 
 					  "while"}; 
 	const char 	operators[] = {"!%&*-+=~|.<>/?"};
 	const char 	separators[] = {";,{}()[]}"};
-	char		buffer[256];
+	char		buffer[MAXBUF];
 	
 	/* Consume white space and new lines */
 	is_keyword = 0;
