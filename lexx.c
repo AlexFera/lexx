@@ -21,8 +21,7 @@
 #include <string.h>
 
 /* Manual lexical analysis */
-void lexical_analysis(FILE *input_file, char current_character, 
-		FILE *output_file)
+void lexical_analysis(FILE *input_file, char current_character)
 {
 	char 		token_characters[256];		
 	unsigned int  	length = 0;		
@@ -55,13 +54,15 @@ void lexical_analysis(FILE *input_file, char current_character,
 		/* testing for keyword */
 		for(i = 0; i < 13; i++) {
 			if(strcmp(keywords[i], token_characters) == 0) {
-				printf("%s\t este cuvant cheie\n", token_characters);
+				printf("%s\t este cuvant cheie\n",
+					       	token_characters);
 				is_keyword = 1;
 				return;
 			}
 		}
 		if(is_keyword == 0) {
-			printf("%s\t este identificator\n", token_characters);
+			printf("%s\t este identificator\n", 
+					token_characters);
 			return;
 		}
 	}
@@ -82,13 +83,15 @@ void lexical_analysis(FILE *input_file, char current_character,
 			/* Testing for operators */
 			for(i = 0; i < 14; i++)
 				if(current_character == operators[i]) {
-				       printf("%c\t este operator\n", current_character);
+				       printf("%c\t este operator\n", 
+						       current_character);
 				       return;
 				}
 	
 	for(i = 0; i < 10; i++)
 		if(current_character == separators[i]) {
-			printf("%c\t este semn de punctuatie\n", current_character);
+			printf("%c\t este semn de punctuatie\n", 
+					current_character);
 			return;
 		}
 	
@@ -120,19 +123,10 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	output_file = fopen("output.txt", "w+");
-	if(output_file == NULL) {
-		printf("Fisierul nu poate fi creat!\n");
-		exit(EXIT_FAILURE);
-	}
-	
 	while((current_character = fgetc(input_file)) != EOF)
-		lexical_analysis(input_file, current_character, 
-				output_file);
-
+		lexical_analysis(input_file, current_character); 
 	
 	fclose(input_file);
-	fclose(output_file);
 	
 	return(0);
 }
