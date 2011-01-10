@@ -26,7 +26,7 @@ void lexical_analysis(FILE *input_file, char current_character)
 	char 		token_characters[256];		
 	unsigned int  	length = 0;		
 	unsigned int  	i = 0;
-	unsigned int	j = 0;	
+	unsigned int	j = 1;	
 	short 		is_keyword = 0;			
 	int 		number = 0;
 	/* keywords[][7] - 7 reprezinta lungimea cuvantului */	
@@ -104,6 +104,7 @@ void lexical_analysis(FILE *input_file, char current_character)
 			buffer[j++] = current_character;
 		}while(current_character != '"');
 		buffer[j] = '\0';
+		buffer[0] = '"';
 		printf("%s este constanta sir de caractere\n", buffer);
 	}
 
