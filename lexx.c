@@ -1,5 +1,5 @@
 /* 
- *  Copyright (C) 2010 <alexnadrufera at gmail dot com>
+ *  Copyright (C) 2011 <alexnadrufera at gmail dot com>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
